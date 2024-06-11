@@ -1,0 +1,36 @@
+---
+title: "Counties"
+author: "Jacob Hardin-Bernhardt"
+format: html
+---
+
+```{r}
+#|echo: false
+#|message: false
+library(tidyverse)
+```
+
+
+```{r}
+#|echo: false
+#|message: false
+nyc_tracts<-read_csv("data/nyc_tracts.csv")
+nyc_tracts|>drop_na()|>ggplot(aes(x=med_income))+geom_histogram()
+
+nyc_tracts|>drop_na()|>ggplot(aes(x=med_income,y=race))+geom_point()
+
+tract_counts <- nyc_tracts %>%
+  count(borough) %>%
+  arrange(desc(n))
+
+ggplot(tract_counts, aes(x = reorder(borough, n), y = n, fill = borough)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Count of Census Tracts per Borough",
+    x = "Borough",
+    y = "Count",
+    fill = "Borough"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
